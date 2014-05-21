@@ -77,41 +77,42 @@ public class test {
 		driver.findElement(By.id("newpasswordfield")).sendKeys("Apttus123");
 		driver.findElement(By.id("password-confirm")).sendKeys("Apttus123");
 		
-		dropdownMod(driver, "security-question_1", "option", "What was the first film you saw in the theater?", 7);
-
+		dropdownModTest(driver, "security-question_1", "option", "What was the first film you saw in the theater?", 7);
 		driver.findElement(By.id("security-answer_1")).sendKeys("Titanic");
-	////////	
-		dropdownMod(driver, "security-question_2", "option", "What was the model of your first car?", 7);
+
+		dropdownModTest(driver, "security-question_2", "option", "What was the model of your first car?", 7);
 		driver.findElement(By.id("security-answer_2")).sendKeys("Honda");
-	///////	
 		
-		dropdownMod(driver, "security-question_3", "option", "What is the name of your favorite sports team?", 7);
+		dropdownModTest(driver, "security-question_3", "option", "What is the name of your favorite sports team?", 7);
 		driver.findElement(By.id("security-answer_3")).sendKeys("Lakers");
 		
-		//driver.findElement(By.id("month")).sendKeys("Apttus123");
 		
-		dropdownMod(driver, "month", "option", "December", 12);
-		dropdownMod(driver, "day", "option", "9", 31);
-		dropdownMod(driver, "year", "option", "1993", 114);
+		dropdownModTest(driver, "month", "option", "December", 12);
+		dropdownModTest(driver, "day", "option", "9", 31);
+		dropdownModTest(driver, "year", "option", "1993", 114);
 		driver.findElement(By.id("addRescueEmail")).sendKeys("eamonb@sbcglobal.net");
 		//driver.findElement(By.id("countryText")).sendKeys("United States");
 		driver.findElement(By.id("mobileCountry-three")).sendKeys("Apttus");
 		driver.findElement(By.id("address-1")).sendKeys("1400 Fashion Island Blvd");
 		driver.findElement(By.id("address-2")).sendKeys("#200");
 		driver.findElement(By.id("town-city")).sendKeys("San Mateo");
-		dropdownMod(driver, "state-province", "option", "California", 80);
+		dropdownMod(driver, "state-province", "option", "California");
 		driver.findElement(By.id("postal-code")).sendKeys("94404");
 		
-		dropdownMod(driver, "languagePopUp", "option", "English (US) - English (US)", 80);
+		dropdownMod(driver, "languagePopUp", "option", "English (US) - English (US)");
 		driver.findElement(By.id("email")).click();
 		driver.findElement(By.id("newsletter")).click();
 		driver.findElement(By.id("agreement")).click();
-		
-		//driver.quit();
+		wait(1000);
+		driver.get("http://www.google.com");
+		wait(1500);
+		driver.navigate().back();
+		wait(1500);
+		driver.quit();
 	}
 
 	
-	public static void dropdownMod(WebDriver driver, String select, String options, String selection, int expected)
+	public static void dropdownModTest(WebDriver driver, String select, String options, String selection, int expected)
 	{
 		WebElement s = driver.findElement(By.id(select));
 		List<WebElement> allOptions = s.findElements(By.tagName(options));
@@ -128,7 +129,6 @@ public class test {
 		    }
 		    counted++;
 		}
-		
 		if (!found)
 			System.out.println("OBJECT NOT FOUND. check for misspelling");
 		
@@ -139,6 +139,24 @@ public class test {
 			System.out.println("No match. Test failed");
 	}
 	
+	public static void dropdownMod(WebDriver driver, String select, String options, String selection)
+	{
+		WebElement s = driver.findElement(By.id(select));
+		List<WebElement> allOptions = s.findElements(By.tagName(options));
+		boolean found = false;
+		//iterating through drop down list and printing each question and its corresponding value out
+		for (WebElement option : allOptions) {
+		    System.out.println("Value is: " + option.getAttribute("value"));
+		    System.out.println(option.getText());
+		    if (option.getText().equals(selection))
+		    {
+		    	found = true;
+		    	option.click();
+		    }
+		}
+		if (!found)
+			System.out.println("OBJECT NOT FOUND. check for misspelling");
+	}
 	
 	
 	
@@ -173,9 +191,17 @@ public class test {
         driver.get("http://www.yahoo.com");
         driver.findElement(By.name("p")).sendKeys("Configure Price Quote (CPQ)\n");
         System.out.println("successfully searched Configure Price Quotes on yahoo");
-        driver.close();
+        wait(1500);
+        driver.quit();
 	}
 	
+	public static void wait(int value)
+	{
+		try {
+			Thread.sleep(value);
+		} 
+		catch (InterruptedException e) {}
+	}
 	
 	public static void highlightElement(WebElement element) {
 		
@@ -184,10 +210,7 @@ public class test {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');", element);
 		
-		try {
-			Thread.sleep(3000);
-		} 
-		catch (InterruptedException e) {}
+		wait(3000);
 		
 		js.executeScript("arguments[0].setAttribute('style', '" + originalStyle + "');", element);
 		
