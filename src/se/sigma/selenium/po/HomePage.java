@@ -12,7 +12,7 @@ public class HomePage {
     public HomePage(WebDriver driver) {
         this.driver = driver;
         String baseUrl = "http://www.yr.no";
-        driver.get(baseUrl);
+
     }
 
     public SearchResultPage searchFor(String location) {
