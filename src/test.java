@@ -12,7 +12,10 @@
 //import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.sql.Driver;
+import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -29,14 +32,74 @@ public class test {
     //static Wait<WebDriver> wait;
 	static WebDriver driver;
 	static WebElement element;
+	
 	public static void main(String[] args) {
-//        driver.get("http://www.yahoo.com/");
-//        System.out.println("successfully jumped to Yahoo");
-//        driver.get("http://www.google.com/");
-//        System.out.println("successfully jumped to Google");
-//        driver.get("http://www.msn.com/");
 		System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+		Scanner scan = new Scanner(System.in);
+		int intInput;
+		String strInput = null;
+		System.out.println("Choose which function you want to perform:");
+		System.out.println("Press 1: jumping between websites and searching");
+		System.out.println("Press 2: filling out registration form");
+		while (true)
+		{
+			intInput = scan.nextInt();
+			if (intInput==1 || intInput==2)
+				break;
+			System.out.println("Please enter either the number 1 or 2 to make your selection");
+		}
+		System.out.println("Would you like to maximize the browser window? (y/n)");
+		while(true)
+		{
+			strInput = scan.nextLine();
+			if (strInput.equals("y") || strInput.equals("n"))
+				break;
+			System.out.println("Please enter either 'y' for yes or 'n' for no");
+		}
 		driver = new ChromeDriver();
+		if (strInput.equals("y"))
+			driver.manage().window().maximize();
+		if (intInput==1)
+			jumpWebsitesAndSearch(driver);
+		if (intInput==2)
+			autoFillRegistration(driver);
+		scan.close();
+	}
+	
+	private static void autoFillRegistration(WebDriver driver) 
+	{
+		//fill out name and password forms
+		driver.get("https://appleid.apple.com/cgi-bin/WebObjects/MyAppleId.woa/wa/createAppleId?localang=en_US");
+		driver.findElement(By.id("first-name")).sendKeys("Eamon");
+		driver.findElement(By.id("middle-name")).sendKeys("Shokrola");
+		driver.findElement(By.id("last-name")).sendKeys("Barkhordarian");
+		driver.findElement(By.id("appleid")).sendKeys("ebarkhordarian@apttus.com");
+		driver.findElement(By.id("newpasswordfield")).sendKeys("apttus");
+		driver.findElement(By.id("password-confirm")).sendKeys("apttus");
+		
+		WebElement select = driver.findElement(By.tagName("select"));
+		List<WebElement> allOptions = select.findElements(By.tagName("option"));
+		int expected = 7;
+		int counted = 0;
+		
+		//iterating through drop down list and printing each question and its corresponding value out
+		for (WebElement option : allOptions) {
+		    System.out.println("Value is: " + option.getAttribute("value"));
+		    System.out.println(option.getText());
+		    option.click();
+		    counted++;
+		}
+		
+		//same number of elements in drop down list as expected
+		if (counted==expected)
+			System.out.println("Match! Test passes");
+		else
+			System.out.println("No match. Test failed");
+		driver.close();
+	}
+
+	public static void jumpWebsitesAndSearch(WebDriver driver)
+	{
 		driver.get("http://www.msn.com");
         System.out.println("successfully jumped to MSN");
         driver.get("http://www.apttus.com/");
@@ -54,61 +117,23 @@ public class test {
         if (success)
         {
         	highlightElement(element);
-            System.out.println("successfully found the Accelerate event button");
+            System.out.println("successfully found the Accelerate customers button");
         }
         else
         {
-        	System.out.println("failed finding the Accelerate event button");
+        	System.out.println("failed finding the Accelerate customers button");
         }
-        //https://appleid.apple.com/cgi-bin/WebObjects/MyAppleId.woa/wa/createAppleId?localang=en_US
-//        driver.get("http://www.yahoo.com/");
-//        driver.findElement(By.name("p")).sendKeys("Configure Price Quote (CPQ)/n");
-//        //driver.findElement(By.id("search-submit")).click();
-//        System.out.println("successfully searched Configure Price Quotes on yahoo");
-//        
+        element = driver.findElement(By.className("read_btn"));
+        highlightElement(element);
         
-//        driver.get("http://www.yahoo.com/");
-//        System.out.println("jumped back to Yahoo");
-//        
-//        
-//        driver.get("http://www.google.com/");
-//        driver.findElement(By.name("q")).sendKeys("Apttus");
-//        driver.findElement(By.name("btnK")).click();
-//        System.out.println("successfully searched Apttus on Google");
-//        
-//        driver.get("http://www.yahoo.com/");
-//        System.out.println("finished with Yahoo");
-//        
-
-        //driver.close();
-        
-        //https://appleid.apple.com/cgi-bin/WebObjects/MyAppleId.woa/wa/createAppleId?localang=en_US
-        
-        
-        
-//        
-//        driver.close();
-        
-//        boolean result;
-//        try {
-//            result = firstPageContainsQAANet();
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//            result = false;
-//        } finally {
-//            driver.close();
-//        }
-//
-//        System.out.println("Test " + (result? "passed." : "failed."));
-//        if (!result) {
-//            System.exit(1);
-//        }
+        driver.get("http://www.yahoo.com");
+        driver.findElement(By.name("p")).sendKeys("Configure Price Quote (CPQ)\n");
+        System.out.println("successfully searched Configure Price Quotes on yahoo");
+        driver.close();
 	}
 	
 	
 	public static void highlightElement(WebElement element) {
-		
-		// Original in Python: https://gist.github.com/3086536
 		
 		String originalStyle = element.getAttribute("style");
 		
@@ -125,27 +150,6 @@ public class test {
 	}
 	
 	
-	
-	
-//	    private static boolean firstPageContainsQAANet() {
-//	        //type search query
-//	    	driver.findElement(By.name("q")).sendKeys("qa automation\n");
-//
-//	        // click search
-//	        driver.findElement(By.name("btnG")).click();
-//
-//	        // Wait for search to complete
-//	        wait.until(new ExpectedCondition<Boolean>() {
-//	            public Boolean apply(WebDriver webDriver) {
-//	                System.out.println("Searching ...");
-//	                return webDriver.findElement(By.id("resultStats")) != null;
-//	            }
-//	        });
-//
-//	        // Look for QAAutomation.net in the results
-//	        return driver.findElement(By.tagName("body")).getText().contains("qaautomation.net");
-//	    }
-
 		
 		
 		
