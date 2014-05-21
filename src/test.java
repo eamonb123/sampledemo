@@ -16,6 +16,7 @@ import java.sql.Driver;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -30,51 +31,55 @@ public class test {
     //static Wait<WebDriver> wait;
 	static WebDriver driver = new ChromeDriver();
 	static Wait<WebDriver> wait = new WebDriverWait(driver, 30);
+	static WebElement element;
 	public static void main(String[] args) {
-        driver.get("http://www.yahoo.com/");
-        driver.get("http://www.google.com/");
-        driver.get("http://www.msn.com/");
-        driver.get("http://www.yahoo.com/");
+//        driver.get("http://www.yahoo.com/");
+//        System.out.println("successfully jumped to Yahoo");
+//        driver.get("http://www.google.com/");
+//        System.out.println("successfully jumped to Google");
+//        driver.get("http://www.msn.com/");
+        System.out.println("successfully jumped to MSN");
+        driver.get("http://www.apttus.com/");
+        System.out.println("successfully jumped to Apttus website");
         boolean success=true;
         try {
         	//can help identify whether a page has changed since the last time you checked it
-          WebElement element = driver.findElement(By.id("nav-autos"));
-          // or driver.findElement(By.id("nav-autoss"));
+        	element = driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div[2]/div[2]/ul/li[2]/a"));
+        	// or driver.findElement(By.id("nav-autoss"));
         } catch(Exception e) {
-          //comment this line out if you do not want the red line error outputs-
+        	//comment this line out if you do not want the red line error outputs-
         	e.printStackTrace();
           success=false;
         }
         if (success)
         {
-            System.out.println("SUCCESS FINDING AUTO ON YAHOO!");
+        	highlightElement(element);
+            System.out.println("successfully found the Accelerate event button");
         }
         else
         {
-        	System.out.println("FAIL FINDING AUTO ON YAHOO!");
+        	System.out.println("failed finding the Accelerate event button");
         }
+//        driver.get("http://www.yahoo.com/");
+//        driver.findElement(By.name("p")).sendKeys("Configure Price Quote (CPQ)/n");
+//        //driver.findElement(By.id("search-submit")).click();
+//        System.out.println("successfully searched Configure Price Quotes on yahoo");
+//        
+        
+//        driver.get("http://www.yahoo.com/");
+//        System.out.println("jumped back to Yahoo");
+//        
+//        
+//        driver.get("http://www.google.com/");
+//        driver.findElement(By.name("q")).sendKeys("Apttus");
+//        driver.findElement(By.name("btnK")).click();
+//        System.out.println("successfully searched Apttus on Google");
+//        
+//        driver.get("http://www.yahoo.com/");
+//        System.out.println("finished with Yahoo");
+//        
 
-        driver.findElement(By.name("p")).sendKeys("Configure Price Quote (CPQ)");
-        driver.findElement(By.id("search-submit")).click();
-        System.out.println("successfully searched Configure Price Quotes on yahoo");
-        //previous 2 lines could be condensed into 1 line:
-        	//driver.findElement(By.name("p")).sendKeys("derive so hard/n");
-        
-        
-        driver.get("http://www.yahoo.com/");
-        System.out.println("jumped back to Yahoo");
-        
-        
-        driver.get("http://www.google.com/");
-        driver.findElement(By.name("q")).sendKeys("Apttus");
-        driver.findElement(By.name("btnK")).click();
-        System.out.println("successfully searched Apttus on Google");
-        
-        driver.get("http://www.yahoo.com/");
-        System.out.println("finished with Yahoo");
-        
-
-        driver.close();
+        //driver.close();
         
         //https://appleid.apple.com/cgi-bin/WebObjects/MyAppleId.woa/wa/createAppleId?localang=en_US
         
@@ -98,6 +103,29 @@ public class test {
 //            System.exit(1);
 //        }
 	}
+	
+	
+	public static void highlightElement(WebElement element) {
+		
+		// Original in Python: https://gist.github.com/3086536
+		
+		String originalStyle = element.getAttribute("style");
+		
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');", element);
+		
+		try {
+			Thread.sleep(3000);
+		} 
+		catch (InterruptedException e) {}
+		
+		js.executeScript("arguments[0].setAttribute('style', '" + originalStyle + "');", element);
+		
+	}
+	
+	
+	
+	
 	    private static boolean firstPageContainsQAANet() {
 	        //type search query
 	    	driver.findElement(By.name("q")).sendKeys("qa automation\n");
