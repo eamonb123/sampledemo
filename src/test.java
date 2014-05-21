@@ -93,8 +93,21 @@ public class test {
 		dropdownMod(driver, "month", "option", "December", 12);
 		dropdownMod(driver, "day", "option", "9", 31);
 		dropdownMod(driver, "year", "option", "1993", 114);
+		driver.findElement(By.id("addRescueEmail")).sendKeys("eamonb@sbcglobal.net");
+		//driver.findElement(By.id("countryText")).sendKeys("United States");
+		driver.findElement(By.id("mobileCountry-three")).sendKeys("Apttus");
+		driver.findElement(By.id("address-1")).sendKeys("1400 Fashion Island Blvd");
+		driver.findElement(By.id("address-2")).sendKeys("#200");
+		driver.findElement(By.id("town-city")).sendKeys("San Mateo");
+		dropdownMod(driver, "state-province", "option", "California", 80);
+		driver.findElement(By.id("postal-code")).sendKeys("94404");
 		
-		//driver.close();
+		dropdownMod(driver, "languagePopUp", "option", "English (US) - English (US)", 80);
+		driver.findElement(By.id("email")).click();
+		driver.findElement(By.id("newsletter")).click();
+		driver.findElement(By.id("agreement")).click();
+		
+		//driver.quit();
 	}
 
 	
