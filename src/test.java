@@ -11,10 +11,8 @@
 //import org.openqa.selenium.support.ui.ExpectedCondition;
 //import org.openqa.selenium.support.ui.WebDriverWait;
 
-
 import java.sql.Driver;
 import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -29,8 +27,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class test {
 	//static WebDriver driver;
     //static Wait<WebDriver> wait;
-	static WebDriver driver = new ChromeDriver();
-	static Wait<WebDriver> wait = new WebDriverWait(driver, 30);
+	static WebDriver driver;
 	static WebElement element;
 	public static void main(String[] args) {
 //        driver.get("http://www.yahoo.com/");
@@ -38,6 +35,9 @@ public class test {
 //        driver.get("http://www.google.com/");
 //        System.out.println("successfully jumped to Google");
 //        driver.get("http://www.msn.com/");
+		System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+		driver = new ChromeDriver();
+		driver.get("http://www.msn.com");
         System.out.println("successfully jumped to MSN");
         driver.get("http://www.apttus.com/");
         System.out.println("successfully jumped to Apttus website");
@@ -60,6 +60,7 @@ public class test {
         {
         	System.out.println("failed finding the Accelerate event button");
         }
+        //https://appleid.apple.com/cgi-bin/WebObjects/MyAppleId.woa/wa/createAppleId?localang=en_US
 //        driver.get("http://www.yahoo.com/");
 //        driver.findElement(By.name("p")).sendKeys("Configure Price Quote (CPQ)/n");
 //        //driver.findElement(By.id("search-submit")).click();
@@ -126,24 +127,24 @@ public class test {
 	
 	
 	
-	    private static boolean firstPageContainsQAANet() {
-	        //type search query
-	    	driver.findElement(By.name("q")).sendKeys("qa automation\n");
-
-	        // click search
-	        driver.findElement(By.name("btnG")).click();
-
-	        // Wait for search to complete
-	        wait.until(new ExpectedCondition<Boolean>() {
-	            public Boolean apply(WebDriver webDriver) {
-	                System.out.println("Searching ...");
-	                return webDriver.findElement(By.id("resultStats")) != null;
-	            }
-	        });
-
-	        // Look for QAAutomation.net in the results
-	        return driver.findElement(By.tagName("body")).getText().contains("qaautomation.net");
-	    }
+//	    private static boolean firstPageContainsQAANet() {
+//	        //type search query
+//	    	driver.findElement(By.name("q")).sendKeys("qa automation\n");
+//
+//	        // click search
+//	        driver.findElement(By.name("btnG")).click();
+//
+//	        // Wait for search to complete
+//	        wait.until(new ExpectedCondition<Boolean>() {
+//	            public Boolean apply(WebDriver webDriver) {
+//	                System.out.println("Searching ...");
+//	                return webDriver.findElement(By.id("resultStats")) != null;
+//	            }
+//	        });
+//
+//	        // Look for QAAutomation.net in the results
+//	        return driver.findElement(By.tagName("body")).getText().contains("qaautomation.net");
+//	    }
 
 		
 		
@@ -572,4 +573,3 @@ public class test {
 //            throw new AssertionError(failureMsg);
 //    }
 //}
-
