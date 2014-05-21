@@ -41,12 +41,13 @@ public class test {
 		System.out.println("Choose which function you want to perform:");
 		System.out.println("Press 1: jumping between websites and searching");
 		System.out.println("Press 2: filling out registration form");
+		System.out.println("Press 3: signing into Apttus");
 		while (true)
 		{
 			intInput = scan.nextInt();
-			if (intInput==1 || intInput==2)
+			if (intInput==1 || intInput==2 || intInput==3)
 				break;
-			System.out.println("Please enter either the number 1 or 2 to make your selection");
+			System.out.println("Please enter either the number 1, 2, or 3 to make your selection");
 		}
 		System.out.println("Would you like to maximize the browser window? (y/n)");
 		while(true)
@@ -63,6 +64,8 @@ public class test {
 			jumpWebsitesAndSearch(driver);
 		if (intInput==2)
 			autoFillRegistration(driver);
+		if (intInput==3)
+			signInSalesforce(driver);
 		scan.close();
 	}
 	
@@ -110,7 +113,54 @@ public class test {
 		wait(1500);
 		driver.quit();
 	}
-
+	
+	
+	public static void jumpWebsitesAndSearch(WebDriver driver)
+	{
+		driver.get("http://www.msn.com");
+        System.out.println("successfully jumped to MSN");
+        driver.get("http://www.apttus.com/");
+        System.out.println("successfully jumped to Apttus website");
+        boolean success=true;
+        try {
+        	//can help identify whether a page has changed since the last time you checked it
+        	element = driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div[2]/div[2]/ul/li[2]/a"));
+        	// or driver.findElement(By.id("nav-autoss"));
+        } catch(Exception e) {
+        	//comment this line out if you do not want the red line error outputs-
+        	e.printStackTrace();
+          success=false;
+        }
+        if (success)
+        {
+        	highlightElement(element);
+            System.out.println("successfully found the Accelerate customers button");
+        }
+        else
+        {
+        	System.out.println("failed finding the Accelerate customers button");
+        }
+        element = driver.findElement(By.className("read_btn"));
+        highlightElement(element);
+        
+        driver.get("http://www.yahoo.com");
+        driver.findElement(By.name("p")).sendKeys("Configure Price Quote (CPQ)\n");
+        System.out.println("successfully searched Configure Price Quotes on yahoo");
+        wait(1500);
+        driver.quit();
+	}
+	
+	public static void signInSalesforce(WebDriver driver)
+	{
+		driver.get("https://login.salesforce.com/");
+		driver.findElement(By.id("username")).sendKeys("ebarkhordarian@apttus.com");
+		driver.findElement(By.id("password")).sendKeys("E1amondo");
+		driver.findElement(By.id("Login")).click();
+		driver.findElement(By.id("publishereditablearea")).sendKeys("selenium test");
+		driver.findElement(By.id("publishersharebutton")).click();
+		wait(2000);
+		driver.quit();
+	}
 	
 	public static void dropdownModTest(WebDriver driver, String select, String options, String selection, int expected)
 	{
@@ -156,43 +206,6 @@ public class test {
 		}
 		if (!found)
 			System.out.println("OBJECT NOT FOUND. check for misspelling");
-	}
-	
-	
-	
-	public static void jumpWebsitesAndSearch(WebDriver driver)
-	{
-		driver.get("http://www.msn.com");
-        System.out.println("successfully jumped to MSN");
-        driver.get("http://www.apttus.com/");
-        System.out.println("successfully jumped to Apttus website");
-        boolean success=true;
-        try {
-        	//can help identify whether a page has changed since the last time you checked it
-        	element = driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div[2]/div[2]/ul/li[2]/a"));
-        	// or driver.findElement(By.id("nav-autoss"));
-        } catch(Exception e) {
-        	//comment this line out if you do not want the red line error outputs-
-        	e.printStackTrace();
-          success=false;
-        }
-        if (success)
-        {
-        	highlightElement(element);
-            System.out.println("successfully found the Accelerate customers button");
-        }
-        else
-        {
-        	System.out.println("failed finding the Accelerate customers button");
-        }
-        element = driver.findElement(By.className("read_btn"));
-        highlightElement(element);
-        
-        driver.get("http://www.yahoo.com");
-        driver.findElement(By.name("p")).sendKeys("Configure Price Quote (CPQ)\n");
-        System.out.println("successfully searched Configure Price Quotes on yahoo");
-        wait(1500);
-        driver.quit();
 	}
 	
 	public static void wait(int value)
