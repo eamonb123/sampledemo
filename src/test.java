@@ -77,76 +77,54 @@ public class test {
 		driver.findElement(By.id("newpasswordfield")).sendKeys("Apttus123");
 		driver.findElement(By.id("password-confirm")).sendKeys("Apttus123");
 		
-		WebElement select = driver.findElement(By.id("security-question_1"));
-		List<WebElement> allOptions = select.findElements(By.tagName("option"));
-		int expected = 7;
-		int counted = 0;
-		
-		//iterating through drop down list and printing each question and its corresponding value out
-		for (WebElement option : allOptions) {
-		    System.out.println("Value is: " + option.getAttribute("value"));
-		    System.out.println(option.getText());
-		    if (option.getText().equals("What was the first film you saw in the theater?"))
-		    {
-		    	option.click();
-		    }
-		    counted++;
-		}
-		
-		//same number of elements in drop down list as expected
-		if (counted==expected)
-			System.out.println("Match! First drop down test passes");
-		else
-			System.out.println("No match. First test failed");
+		dropdownMod(driver, "security-question_1", "option", "What was the first film you saw in the theater?", 7);
+
 		driver.findElement(By.id("security-answer_1")).sendKeys("Titanic");
 	////////	
-		select =driver.findElement(By.id("security-question_2"));
-		allOptions = select.findElements(By.tagName("option"));
-		expected = 7;
-		counted = 0;
-		
-		//iterating through drop down list and printing each question and its corresponding value out
-		for (WebElement option : allOptions) {
-		    System.out.println("Value is: " + option.getAttribute("value"));
-		    System.out.println(option.getText());
-		    if (option.getText().equals("What was the model of your first car?"))
-		    {
-		    	option.click();
-		    }
-		    counted++;
-		}
-		if (counted==expected)
-			System.out.println("Match! Second drop down test passes");
-		else
-			System.out.println("No match. Second test failed");
+		dropdownMod(driver, "security-question_2", "option", "What was the model of your first car?", 7);
 		driver.findElement(By.id("security-answer_2")).sendKeys("Honda");
 	///////	
-		select = driver.findElement(By.id("security-question_3"));
-		allOptions = select.findElements(By.tagName("option"));
-		expected = 7;
-		counted = 0;
 		
-		//iterating through drop down list and printing each question and its corresponding value out
-		for (WebElement option : allOptions) {
-		    System.out.println("Value is: " + option.getAttribute("value"));
-		    System.out.println(option.getText());
-		    if (option.getText().equals("What is the name of your favorite sports team?"))
-		    {
-		    	option.click();
-		    }
-		    counted++;
-		}
-		if (counted==expected)
-			System.out.println("Match! Third drop down test passes");
-		else
-			System.out.println("No match. Third test failed");
+		dropdownMod(driver, "security-question_3", "option", "What is the name of your favorite sports team?", 7);
 		driver.findElement(By.id("security-answer_3")).sendKeys("Lakers");
+		
+		//driver.findElement(By.id("month")).sendKeys("Apttus123");
+		
+		dropdownMod(driver, "month", "option", "December", 12);
+		dropdownMod(driver, "day", "option", "9", 31);
+		dropdownMod(driver, "year", "option", "1993", 114);
+		
 		//driver.close();
 	}
 
 	
-	
-	
+	public static void dropdownMod(WebDriver driver, String select, String options, String selection, int expected)
+	{
+		WebElement s = driver.findElement(By.id(select));
+		List<WebElement> allOptions = s.findElements(By.tagName(options));
+		int counted =0;
+		boolean found = false;
+		//iterating through drop down list and printing each question and its corresponding value out
+		for (WebElement option : allOptions) {
+		    System.out.println("Value is: " + option.getAttribute("value"));
+		    System.out.println(option.getText());
+		    if (option.getText().equals(selection))
+		    {
+		    	found = true;
+		    	option.click();
+		    }
+		    counted++;
+		}
+		
+		if (!found)
+			System.out.println("OBJECT NOT FOUND. check for misspelling");
+		
+		//same number of elements in drop down list as expected
+		if (counted==(expected+1))
+			System.out.println("Match! Test passes");
+		else
+			System.out.println("No match. Test failed");
+	}
 	
 	
 	
