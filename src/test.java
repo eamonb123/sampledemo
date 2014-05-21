@@ -74,10 +74,10 @@ public class test {
 		driver.findElement(By.id("middle-name")).sendKeys("Shokrola");
 		driver.findElement(By.id("last-name")).sendKeys("Barkhordarian");
 		driver.findElement(By.id("appleid")).sendKeys("ebarkhordarian@apttus.com");
-		driver.findElement(By.id("newpasswordfield")).sendKeys("apttus");
-		driver.findElement(By.id("password-confirm")).sendKeys("apttus");
+		driver.findElement(By.id("newpasswordfield")).sendKeys("Apttus123");
+		driver.findElement(By.id("password-confirm")).sendKeys("Apttus123");
 		
-		WebElement select = driver.findElement(By.tagName("select"));
+		WebElement select = driver.findElement(By.id("security-question_1"));
 		List<WebElement> allOptions = select.findElements(By.tagName("option"));
 		int expected = 7;
 		int counted = 0;
@@ -86,18 +86,71 @@ public class test {
 		for (WebElement option : allOptions) {
 		    System.out.println("Value is: " + option.getAttribute("value"));
 		    System.out.println(option.getText());
-		    option.click();
+		    if (option.getText().equals("What was the first film you saw in the theater?"))
+		    {
+		    	option.click();
+		    }
 		    counted++;
 		}
 		
 		//same number of elements in drop down list as expected
 		if (counted==expected)
-			System.out.println("Match! Test passes");
+			System.out.println("Match! First drop down test passes");
 		else
-			System.out.println("No match. Test failed");
-		driver.close();
+			System.out.println("No match. First test failed");
+		driver.findElement(By.id("security-answer_1")).sendKeys("Titanic");
+	////////	
+		select =driver.findElement(By.id("security-question_2"));
+		allOptions = select.findElements(By.tagName("option"));
+		expected = 7;
+		counted = 0;
+		
+		//iterating through drop down list and printing each question and its corresponding value out
+		for (WebElement option : allOptions) {
+		    System.out.println("Value is: " + option.getAttribute("value"));
+		    System.out.println(option.getText());
+		    if (option.getText().equals("What was the model of your first car?"))
+		    {
+		    	option.click();
+		    }
+		    counted++;
+		}
+		if (counted==expected)
+			System.out.println("Match! Second drop down test passes");
+		else
+			System.out.println("No match. Second test failed");
+		driver.findElement(By.id("security-answer_2")).sendKeys("Honda");
+	///////	
+		select = driver.findElement(By.id("security-question_3"));
+		allOptions = select.findElements(By.tagName("option"));
+		expected = 7;
+		counted = 0;
+		
+		//iterating through drop down list and printing each question and its corresponding value out
+		for (WebElement option : allOptions) {
+		    System.out.println("Value is: " + option.getAttribute("value"));
+		    System.out.println(option.getText());
+		    if (option.getText().equals("What is the name of your favorite sports team?"))
+		    {
+		    	option.click();
+		    }
+		    counted++;
+		}
+		if (counted==expected)
+			System.out.println("Match! Third drop down test passes");
+		else
+			System.out.println("No match. Third test failed");
+		driver.findElement(By.id("security-answer_3")).sendKeys("Lakers");
+		//driver.close();
 	}
 
+	
+	
+	
+	
+	
+	
+	
 	public static void jumpWebsitesAndSearch(WebDriver driver)
 	{
 		driver.get("http://www.msn.com");
