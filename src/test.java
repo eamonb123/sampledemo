@@ -28,8 +28,6 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class test {
-	//static WebDriver driver;
-    //static Wait<WebDriver> wait;
 	static WebDriver driver;
 	static WebElement element;
 	
@@ -37,11 +35,10 @@ public class test {
 		System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
 		Scanner scan = new Scanner(System.in);
 		int intInput;
-		String strInput = null;
 		System.out.println("Choose which function you want to perform:");
-		System.out.println("Press 1: jumping between websites and searching");
-		System.out.println("Press 2: filling out registration form");
-		System.out.println("Press 3: signing into Apttus");
+		System.out.println("Press 1: Jumping between websites and searching");
+		System.out.println("Press 2: Filling out registration form");
+		System.out.println("Press 3: Signing into Apttus");
 		while (true)
 		{
 			intInput = scan.nextInt();
@@ -49,23 +46,18 @@ public class test {
 				break;
 			System.out.println("Please enter either the number 1, 2, or 3 to make your selection");
 		}
-		System.out.println("Would you like to maximize the browser window? (y/n)");
-		while(true)
+		
+		if (maximizeWindow(scan))
 		{
-			strInput = scan.nextLine();
-			if (strInput.equals("y") || strInput.equals("n"))
-				break;
-			System.out.println("Please enter either 'y' for yes or 'n' for no");
-		}
-		driver = new ChromeDriver();
-		if (strInput.equals("y"))
 			driver.manage().window().maximize();
+		}
+
 		if (intInput==1)
 			jumpWebsitesAndSearch(driver);
-		if (intInput==2)
+		else if (intInput==2)
 			autoFillRegistration(driver);
-		if (intInput==3)
-			signInSalesforce(driver);
+		else if (intInput==3)
+			signInSalesforce(driver, scan);
 		scan.close();
 	}
 	
@@ -150,16 +142,37 @@ public class test {
         driver.quit();
 	}
 	
-	public static void signInSalesforce(WebDriver driver)
+	public static void signInSalesforce(WebDriver driver, Scanner scan)
 	{
-		driver.get("https://login.salesforce.com/");
-		driver.findElement(By.id("username")).sendKeys("ebarkhordarian@apttus.com");
-		driver.findElement(By.id("password")).sendKeys("E1amondo");
-		driver.findElement(By.id("Login")).click();
+		String username, password;
+		System.out.println("Please type in your username and password");
+		System.out.println("Username: ");
+		username = scan.nextLine();
+		System.out.println("Password: ");
+		password = scan.nextLine();
+		login(driver, username, password);
 		driver.findElement(By.id("publishereditablearea")).sendKeys("selenium test");
 		driver.findElement(By.id("publishersharebutton")).click();
 		wait(2000);
 		driver.quit();
+	}
+	
+	public static boolean maximizeWindow(Scanner scan)
+	{
+		String strInput;
+		System.out.println("Would you like to maximize the browser window? (y/n)");
+		while(true)
+		{
+			strInput = scan.nextLine();
+			if (strInput.equals("y") || strInput.equals("n"))
+				break;
+			System.out.println("Please enter either 'y' for yes or 'n' for no");
+		}
+		driver = new ChromeDriver();
+		if (strInput.equals("y"))
+			return true;
+		else
+			return false;
 	}
 	
 	public static void dropdownModTest(WebDriver driver, String select, String options, String selection, int expected)
@@ -207,13 +220,19 @@ public class test {
 		if (!found)
 			System.out.println("OBJECT NOT FOUND. check for misspelling");
 	}
-	
 	public static void wait(int value)
 	{
 		try {
 			Thread.sleep(value);
 		} 
 		catch (InterruptedException e) {}
+	}
+	
+	public static void login(WebDriver driver, String username, String password){
+		driver.get("https://login.salesforce.com/");
+		driver.findElement(By.id("username")).sendKeys(username);
+		driver.findElement(By.id("password")).sendKeys(password);
+		driver.findElement(By.id("Login")).click();
 	}
 	
 	public static void highlightElement(WebElement element) {
