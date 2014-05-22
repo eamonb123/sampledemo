@@ -11,21 +11,14 @@
 //import org.openqa.selenium.support.ui.ExpectedCondition;
 //import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.sql.Driver;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 public class test {
 	static WebDriver driver;
@@ -46,22 +39,25 @@ public class test {
 				break;
 			System.out.println("Please enter either the number 1, 2, or 3 to make your selection");
 		}
-		
-		if (maximizeWindow(scan))
+		if (maximizeWindow(driver, scan))
 		{
+			driver = new ChromeDriver();
 			driver.manage().window().maximize();
 		}
-
+		else
+			driver = new ChromeDriver();
+		
 		if (intInput==1)
-			jumpWebsitesAndSearch(driver);
+			jumpWebsitesAndSearch(driver, scan);
 		else if (intInput==2)
-			autoFillRegistration(driver);
+			autoFillRegistration(driver, scan);
 		else if (intInput==3)
 			signInSalesforce(driver, scan);
+		
 		scan.close();
 	}
 	
-	private static void autoFillRegistration(WebDriver driver) 
+	private static void autoFillRegistration(WebDriver driver, Scanner scan) 
 	{
 		//fill out name and password forms
 		driver.get("https://appleid.apple.com/cgi-bin/WebObjects/MyAppleId.woa/wa/createAppleId?localang=en_US");
@@ -74,13 +70,15 @@ public class test {
 		
 		dropdownModTest(driver, "security-question_1", "option", "What was the first film you saw in the theater?", 7);
 		driver.findElement(By.id("security-answer_1")).sendKeys("Titanic");
+		wait(2000);
 
 		dropdownModTest(driver, "security-question_2", "option", "What was the model of your first car?", 7);
 		driver.findElement(By.id("security-answer_2")).sendKeys("Honda");
+		wait(2000);
 		
 		dropdownModTest(driver, "security-question_3", "option", "What is the name of your favorite sports team?", 7);
 		driver.findElement(By.id("security-answer_3")).sendKeys("Lakers");
-		
+		wait(2000);
 		
 		dropdownModTest(driver, "month", "option", "December", 12);
 		dropdownModTest(driver, "day", "option", "9", 31);
@@ -107,7 +105,7 @@ public class test {
 	}
 	
 	
-	public static void jumpWebsitesAndSearch(WebDriver driver)
+	public static void jumpWebsitesAndSearch(WebDriver driver, Scanner scan)
 	{
 		driver.get("http://www.msn.com");
         System.out.println("successfully jumped to MSN");
@@ -144,20 +142,26 @@ public class test {
 	
 	public static void signInSalesforce(WebDriver driver, Scanner scan)
 	{
-		String username, password;
-		System.out.println("Please type in your username and password");
-		System.out.println("Username: ");
-		username = scan.nextLine();
-		System.out.println("Password: ");
-		password = scan.nextLine();
-		login(driver, username, password);
+//		String username, password;
+//		System.out.println("Please type in your username and password");
+//		System.out.println("Username: ");
+//		username = scan.nextLine();
+//		System.out.println("Password: ");
+//		password = scan.nextLine();
+		login(driver, "ebarkhordarian@apttus.com", "@pttus123");
 		driver.findElement(By.id("publishereditablearea")).sendKeys("selenium test");
 		driver.findElement(By.id("publishersharebutton")).click();
 		wait(2000);
+		driver.findElement(By.cssSelector("a[class='zen-trigger feeditemActionMenuButton']")).click();
+		driver.findElement(By.xpath("//*[@id='0D550000016xqLu']/div/div[1]/div[2]/span/span[5]/div/ul/li[3]")).click();
+		
+		//driver.findElement(By.id("0D550000016xptU")).click();
+		wait(5000);
 		driver.quit();
+		
 	}
 	
-	public static boolean maximizeWindow(Scanner scan)
+	public static boolean maximizeWindow(WebDriver driver, Scanner scan)
 	{
 		String strInput;
 		System.out.println("Would you like to maximize the browser window? (y/n)");
@@ -168,7 +172,6 @@ public class test {
 				break;
 			System.out.println("Please enter either 'y' for yes or 'n' for no");
 		}
-		driver = new ChromeDriver();
 		if (strInput.equals("y"))
 			return true;
 		else
